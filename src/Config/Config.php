@@ -94,7 +94,7 @@ final class Config
             $config["accessKeySecret"],
             $config["endpoint"],
             (isset($config["securityToken"]) ? $config["securityToken"] : false),
-            (isset($config["securityToken"]) ? $config["securityToken"] : null)
+            (isset($config["proxy"]) ? $config["proxy"] : false)
         );
     }
 }
