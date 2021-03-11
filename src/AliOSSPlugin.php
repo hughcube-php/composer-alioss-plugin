@@ -49,7 +49,7 @@ class AliOSSPlugin implements PluginInterface, EventSubscriberInterface
     {
         return [
             PluginEvents::PRE_FILE_DOWNLOAD => [
-                ['onPluginPreFileDownload', 0],
+                ['onPluginPreFileDownload', PHP_INT_MAX],
             ],
         ];
     }
