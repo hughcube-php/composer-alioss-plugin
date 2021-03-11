@@ -22,18 +22,23 @@ use OSS\OssClient;
 final class Config
 {
     /**
-     * @var array $clients
+     * @var OssClient[] $clients
      */
     private $clients;
+
+    /**
+     * @var array $config
+     */
+    private $config;
 
     /**
      * Constructor.
      *
      * @param array $config The config
      */
-    public function __construct(array $clients)
+    public function __construct(array $config)
     {
-        $this->clients = $clients;
+        $this->config = $config;
     }
 
     /**
@@ -61,7 +66,7 @@ final class Config
      */
     public function getClient(Url $url)
     {
-        foreach ($this->clients as $client) {
+        foreach ($this->config as $client) {
             if (isset($client['active']) && !$client['active']) {
                 continue;
             }
@@ -89,12 +94,17 @@ final class Config
      */
     protected function makeClient($config)
     {
-        return new OssClient(
-            $config["accessKey"],
-            $config["accessKeySecret"],
-            $config["endpoint"],
-            (isset($config["securityToken"]) ? $config["securityToken"] : false),
-            (isset($config["proxy"]) ? $config["proxy"] : false)
-        );
+        $clientKey = md5(serialize($config));
+        if (isset($this->clients[$clientKey])) {
+            $this->clients[$clientKey] = new OssClient(
+                $config["accessKey"],
+                $config["accessKeySecret"],
+                $config["endpoint"],
+                (isset($config["securityToken"]) ? $config["securityToken"] : false),
+                (isset($config["proxy"]) ? $config["proxy"] : false)
+            );
+        }
+
+        return $this->clients[$clientKey];
     }
 }

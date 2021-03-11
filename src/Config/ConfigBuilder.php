@@ -23,6 +23,11 @@ use Composer\Json\JsonFile;
 class ConfigBuilder
 {
     /**
+     * @var Config
+     */
+    protected static $config;
+
+    /**
      * Build the config of plugin.
      *
      * @param Composer $composer The composer
@@ -32,8 +37,12 @@ class ConfigBuilder
      */
     public static function build(Composer $composer, $io = null)
     {
-        $config = self::getConfigBase($composer, $io);
-        return new Config($config);
+        if (!static::$config instanceof Config) {
+            $config = self::getConfigBase($composer, $io);
+            static::$config = new Config($config);
+        }
+
+        return static::$config;
     }
 
     /**
