@@ -49,7 +49,7 @@ final class Config
             return $processedUrl;
         }
 
-        return $client->signUrl($bucket, $url->getPath(), 120);
+        return $client->signUrl($bucket, ltrim($url->getPath(), "/"));
     }
 
     /**
