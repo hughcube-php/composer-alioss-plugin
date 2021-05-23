@@ -42,7 +42,7 @@ final class Config
     }
 
     /**
-     * @param string $url
+     * @param string $processedUrl
      * @return string
      */
     public function signUrl($processedUrl)
@@ -88,20 +88,20 @@ final class Config
     }
 
     /**
-     * @param $config
+     * @param array $config
      * @return OssClient
      * @throws \OSS\Core\OssException
      */
     protected function makeClient($config)
     {
         $clientKey = md5(serialize($config));
-        if (isset($this->clients[$clientKey])) {
+        if (!isset($this->clients[$clientKey])) {
             $this->clients[$clientKey] = new OssClient(
                 $config["accessKey"],
                 $config["accessKeySecret"],
                 $config["endpoint"],
-                (isset($config["securityToken"]) ? $config["securityToken"] : false),
-                (isset($config["proxy"]) ? $config["proxy"] : false)
+                (isset($config["securityToken"]) ? $config["securityToken"] : null),
+                (isset($config["proxy"]) ? $config["proxy"] : null)
             );
         }
 
