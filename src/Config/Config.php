@@ -22,12 +22,12 @@ use OSS\OssClient;
 final class Config
 {
     /**
-     * @var OssClient[] $clients
+     * @var OssClient[]
      */
     private $clients;
 
     /**
-     * @var array $config
+     * @var array
      */
     private $config;
 
@@ -43,6 +43,7 @@ final class Config
 
     /**
      * @param string $processedUrl
+     *
      * @return string
      */
     public function signUrl($processedUrl)
@@ -54,7 +55,7 @@ final class Config
             return $processedUrl;
         }
 
-        return $client->signUrl($bucket, ltrim($url->getPath(), "/"));
+        return $client->signUrl($bucket, ltrim($url->getPath(), '/'));
     }
 
     /**
@@ -81,7 +82,7 @@ final class Config
                 continue;
             }
 
-            return [$this->makeClient($client), $client["bucket"]];
+            return [$this->makeClient($client), $client['bucket']];
         }
 
         return [null, null];
@@ -89,19 +90,21 @@ final class Config
 
     /**
      * @param array $config
-     * @return OssClient
+     *
      * @throws \OSS\Core\OssException
+     *
+     * @return OssClient
      */
     protected function makeClient($config)
     {
         $clientKey = md5(serialize($config));
         if (!isset($this->clients[$clientKey])) {
             $this->clients[$clientKey] = new OssClient(
-                $config["accessKey"],
-                $config["accessKeySecret"],
-                $config["endpoint"],
-                (isset($config["securityToken"]) ? $config["securityToken"] : null),
-                (isset($config["proxy"]) ? $config["proxy"] : null)
+                $config['accessKey'],
+                $config['accessKeySecret'],
+                $config['endpoint'],
+                (isset($config['securityToken']) ? $config['securityToken'] : null),
+                (isset($config['proxy']) ? $config['proxy'] : null)
             );
         }
 
